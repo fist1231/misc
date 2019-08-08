@@ -1,0 +1,14 @@
+- npm init
+- npm install --save npm-run-all
+- npm install -D @babel/core @babel/cli @babel/preset-env @babel/node
+- npm install --save-dev babel-preset-es3 babel-preset-es2015-mod babel-plugin-transform-runtime
+- npm install --save-dev babel-preset-es2015-mod
+- Create a file called .babelrc at the root of your project. And put this code in it:
+
+{  "presets": ["@babel/preset-env"]}
+
+- Adding a dev script will look like this in your package.json:
+
+"scripts": {
+    "dev": "set NODE_ENV=development && babel-node --inspect-brk index.js",
+}
