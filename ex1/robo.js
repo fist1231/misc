@@ -81,16 +81,19 @@ const robo = () => {
 		}
 
 		function runRobot(state, robot, memory) {
+		  let totalTurns = 0;
 		  for (let turn = 0;; turn++) {
 		    if (state.parcels.length == 0) {
 		      console.log(`Done in ${turn} turns`);
+		      totalTurns = turn;
 		      break;
 		    }
 		    let action = robot(state, memory);
 		    state = state.move(action.direction);
 		    memory = action.memory;
-		    // console.log(`Moved to ${action.direction}`);
+		    console.log(`Moved to ${action.direction}`);
 		  }
+		  return totalTurns;
 		}
 
 		function randomPick(array) {
@@ -102,7 +105,7 @@ const robo = () => {
 		  return {direction: randomPick(roadGraph[state.place])};
 		}
 
-		VillageState.random = function(parcelCount = 5) {
+		VillageState.random = function(parcelCount = 3) {
 		  let parcels = [];
 		  for (let i = 0; i < parcelCount; i++) {
 		    let address = randomPick(Object.keys(roadGraph));
@@ -112,13 +115,16 @@ const robo = () => {
 		    } while (place == address);
 		    parcels.push({place, address});
 		  }
+		  console.log("Parcels =================================");
 		  console.log(parcels);
+		  console.log("==========================================");
 
 		  return new VillageState("Post Office", parcels);
 		};
 
 
-		const randomState = VillageState.random(20);
+		const randomState = VillageState.random();
+		// const randomState = new VillageState("Post Office", [ { place: "Daria's House", address: "Bob's House" } ]);
 
 		runRobot(randomState, randomRobot);
 
@@ -139,6 +145,91 @@ const robo = () => {
 
 		runRobot(randomState, routeRobot, mailRoute);
 
+
+		function findRoute(graph, from, to) {
+	      // console.log('--------------graph---------------');
+	      // console.log(graph);
+	      // console.log('--------------from---------------');
+	      // console.log(from);
+	      // console.log('--------------to---------------');
+	      // console.log(to);
+	      // console.log('--------------END---------------');
+		  let work = [{at: from, route: []}];
+		  for (let i = 0; i < work.length; i++) {
+		    let {at, route} = work[i];
+		    for (let place of graph[at]) {
+		      if (place == to) {
+			      // console.log(`~~~~~~~~~~~~route done for: ${place}~~~~~~~~~~~~~~~~~~~~`);
+			      // console.log(route.concat(place));
+			      // console.log(`~~~~~~~~~~~~work done for: ${place} ~~~~~~~~~~~~~~~~~~~~`);
+			      // console.log(work);
+			      // console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+		      	return route.concat(place);
+		      }
+		      if (!work.some(w => w.at == place)) {
+		        work.push({at: place, route: route.concat(place)});
+			      // console.log(`~~~~~~~~~~~~work progress for: ${place}~~~~~~~~~~~~~~~~~~~~`);
+			      // console.log(work);
+			      // console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+		      }
+		    }
+		  }
+		}
+
+		function goalOrientedRobot({place, parcels}, route) {
+		  if (route.length == 0) {
+		    let parcel = parcels[0];
+		    if (parcel.place != place) {
+		      route = findRoute(roadGraph, place, parcel.place);
+		    } else {
+		      route = findRoute(roadGraph, place, parcel.address);
+		    }
+		  }
+		  return {direction: route[0], memory: route.slice(1)};
+		}
+
+
+		let emptyRoot = [];
+
+		runRobot(randomState, goalOrientedRobot, emptyRoot);
+
+
+		function improvedGoalOrientedRobot({place, parcels}, route) {
+		  if (route.length == 0) {
+		    let parcel = parcels[0];
+		    if (parcel.place != place) {
+		      route = findRoute(roadGraph, place, parcel.place);
+		    } else {
+		      route = findRoute(roadGraph, place, parcel.address);
+		    }
+		  }
+		  return {direction: route[0], memory: route.slice(1)};
+		}
+
+
+		const compareRobors = (robot1, robot2) => {
+
+			let totalTurns1 = 0;
+			let totalTurns2 = 0;
+			const numberOfTasks = 100;
+			for(let i=0; i<numberOfTasks; i++) {
+
+				let genState = VillageState.random();
+				totalTurns1 += runRobot(genState, routeRobot, mailRoute);
+				totalTurns2 += runRobot(genState, goalOrientedRobot, emptyRoot);
+
+			}
+
+			const avgTurns1 = totalTurns1/numberOfTasks;
+			const avgTurns2 = totalTurns2/numberOfTasks;
+
+			console.log(`Robot1 average turns per ${numberOfTasks} task: ${avgTurns1}`);
+
+			console.log(`Robot2 average turns per ${numberOfTasks} task: ${avgTurns2}`);
+
+		}
+
+		// compareRobors(routeRobot, goalOrientedRobot);
 
 }
 
