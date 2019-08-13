@@ -279,3 +279,9 @@ const a5 = () => {
 
 // a5();
 
+
+const ex6 = () => {
+	console.log('extras');
+}
+
+ex6();
