@@ -3,6 +3,14 @@ import Group from './ex6/Group'
 import now from 'performance-now';
 import SCRIPTS from './scripts';
 
+/*
+*
+*******************************************************
+*                   Release 1.1
+*******************************************************
+*
+*/
+
 console.log(`ex1 sum(1 to 10)=${sum(range(0,10))}`);
 
 class Ex1 {
@@ -289,5 +297,5 @@ const misc = () => {
 
 }
 
-misc();
+// misc();
 
