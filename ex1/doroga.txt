@@ -12,3 +12,6 @@
 "scripts": {
     "dev": "set NODE_ENV=development && babel-node --inspect-brk index.js",
 }
+
+git log --pretty="%m %<|(10) %an %<|(30) %ae %Cgreen %h %Creset %Cred %D %Creset %s on %cd"
+
