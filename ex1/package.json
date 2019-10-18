@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "set NODE_ENV=development && babel-node -- regexHome.js",
+    "dev": "set NODE_ENV=development && babel-node -- zz.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
