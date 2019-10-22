@@ -2,7 +2,7 @@ import Future from 'future';
 
 console.log('mod-wrk');
 
-const modules = () => {
+const asyncProm = () => {
 
 	console.log('===================== 1');
 
@@ -10,57 +10,31 @@ const modules = () => {
 
 	console.log('===================== 2');
 
-	const delay = (x) => {
+	const delay = () => {
 		sleep(3000);
 		console.log('After very well sleep promise');
-		return x;
 	}
-
-
-
-	async function asyncDelay(x) {
-		let result = await delay(x);
-		return result;
-	}
-
 
 
 	const veryWell = x => {
-		return new Promise(function(resolve, reject) {
-			// let res = delay(x);
-			let res = delay(x);
-			resolve();
+		const prom = new Promise(function(resolve, reject) {
+			delay();
+			resolve(x);
 		});
+		return prom;
 	}
 
-/*
-	let prom2 = new Promise(function(resolve, reject) {
-		sleep(3000);
-		console.log('After very well sleep promise');
-		resolve(29);
-	});
-*/
 	console.log('===================== 3');
 
-	let prom = new Promise(function(resolve, reject) {
-	  // the function is executed automatically when the promise is constructed
-
-	  // after 1 second signal that the job is done with the result "done"
-	  // setTimeout(() => resolve(29), 3000);
-	  // setTimeout(() => resolve(veryWell(29)), 10);
-	  // resolve(veryWell(29).then(y => console.log(`Got y from who knows where: ${y}`)));
-
-	  // veryWell(241);
-
-
-	});
 
 	console.log('===================== 4');
 
-	// let prom = Promise.resolve(veryWell(29));
-	// prom.then(x => console.log(`Got prom: ${x}`));
 
-	veryWell(77);
+	setTimeout(() => {
+		let pr = veryWell(77);
+//		pr.then(x=>console.log(`Final result is: ${x}`));
+	}, 100);
+
 	console.log('===================== 5');
 
 	// promise.then(x => console.log(`Got promise for: ${x}`));
@@ -81,42 +55,117 @@ const modules = () => {
 
 }
 
-// modules();
+// asyncProm();
 
-	const delay = (x) => {
+
+const asyncCb = () => {
+
+	console.log('===================== 1');
+	let i=0;
+	setInterval(() => console.log(`Interval: ${i++}`), 500 ) ;
+
+	console.log('===================== 2');
+
+	const delay = () => {
 		sleep(3000);
 		console.log('After very well sleep promise');
-		return x;
 	}
 
 
-	function sleep(delay) {
-	    var start = new Date().getTime();
-	    while (new Date().getTime() < start + delay);
+	const veryWell = (x, cb) => {
+		setTimeout(() => {
+			delay();
+			x*=10;
+			cb(x);
+		}, 100);
+	}
+
+	console.log('===================== 3');
+
+
+	console.log('===================== 4');
+
+
+	let pr = veryWell(77, (data, error) => {console.log(`Data is: ${data}`)});
+
+	console.log('===================== 5');
+
+	// promise.then(x => console.log(`Got promise for: ${x}`));
+
+	// veryWell(11).then(x => console.log(`Got veryWell(11): ${x}`));
+
+
+	// prom2.then(x => console.log(`Got prom2: ${x}`));
+
+	console.log('===================== 6');
+
+
+	console.log('===================== 7');
+
+}
+
+// asyncCb();
+
+const tst = () => {
+
+	const abc = (n, message, cb) => {
+		let rez = 0;
+		setTimeout(() => {
+			console.log('start');
+			sleep(n);
+			console.log('done');
+			rez = n;
+			// cb(`Inner cb: ${message} and ${rez}`);
+			cb(`${message} and ${rez}`);
+		}, 100);
 	}
 
 
+	const abcProm = (n, message) => {
 
-	console.log('===================== 11');
-
-
-	const veryWell = x => {
-		return new Promise(function(resolve, reject) {
-			// let res = delay(x);
-			let res = delay(x);
-			resolve(res);
+		const prom = new Promise(function(resolve, reject) {
+			setTimeout(() => {
+				console.log('begin');
+				sleep(n);
+				console.log('end');
+				resolve(message);
+			}, 100);
 		});
+		return prom;
+
 	}
 
 
+console.log('===> Befo');
 
-	console.log('===================== 12');
+ // setTimeout(() => {
+console.log('===> 1');
+	// abc(3000, 'wth1', x => console.log(x));
+	abcProm(3000, 'wth1-Prom');//.then(x => console.log(`Finito-1: ${x}`));
+console.log('===> 2');
+console.log('===> 3');
+console.log('===> 4');
+console.log('===> 5');
+	// abc(2000, 'wth2', x => console.log(x));
+ // }, 10);
 
-	Promise.resolve(veryWell(33)).then(x => console.log(`Got future: ${x}`));
-
-	console.log('===================== 13');
 
 
-	console.log('===================== 14');
+	// abcProm(3000, 'wth1-Prom');
+	// abcProm(2000, 'wth2-Prom');
 
-	console.log('===================== 15');
+
+	// abcProm(3000, 'wth1-Prom').then(x => console.log(`Finito-1: ${x}`));
+	// abcProm(2000, 'wth2-Prom').then(x => console.log(`Finito-2: ${x}`));
+
+console.log('===> Afto');
+
+
+}
+
+tst();
+
+function sleep(delay) {
+    var start = new Date().getTime();
+    while (new Date().getTime() < start + delay);
+}
