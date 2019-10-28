@@ -32,4 +32,5 @@ const checkMid = (val, pres, low, high, count) => {
      }
 }
 
+
 main();
