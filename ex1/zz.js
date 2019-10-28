@@ -1,3 +1,11 @@
+import assert from 'assert'
+
+import { sum, range } from 'mathjs'
+
+class RangeError extends Error {}
+class InputError extends Error {}
+
+
 console.log("zig");
 
 const main = () => {
@@ -26,8 +34,10 @@ const main = () => {
 	// struct(); 
 
 	// inplaceSwap();
+	inplaceSwap();
+	// arraySwap();
 
-	arrayOnly();
+	// arrayOnly();
 
 }
 
@@ -44,22 +54,49 @@ const arrayOnly = () => {
 	console.log(arr);
 }
 
+const arraySwap = () => {
+	const arr = [0,1,2,3,4,5,6];
+	const n = 3;
+	console.log(`===> before swap: ${arr}`);
+	console.log(`===> m is: ${n}`);
+	arr.splice(arr.length-n).map((x, i) => arr.splice(i, 0, x));
+	console.log(`===> after swap: ${arr}`);
+}
+
 const inplaceSwap = () => {
 
-	const arr = [4, 3, 6, 5, 0];
-	const n = 2;
-	// const arr = [8, 2, 5, 6, 1, 3, 7];
-	// const n = 3;
+	// const arr = [4, 3, 6, 5, 0];
+	// const n = 2;
+	// const arr = [-1, -100, 3, 99];
+	const arr = [0,1,2,3,4,5,6];
+	const expect = [3,4,5,6,0,1,2];
+	const n = 3;
 	console.log(`===> before swap: ${arr}`);
+	console.log(`===> m is: ${n}`);
+
+	if(n < 1 || n >=arr.length) {
+		throw new RangeError("EffOff please");
+	}
+
 	// for(let i=0; i<arr.length-1; i++) {
 	// 	arr[i] += arr[arr.length-(n-i%n)];
 	// 	arr[arr.length-(n-i%n)] = arr[i] - arr[arr.length-(n-i%n)];
 	// 	arr[i] -= arr[arr.length-(n-i%n)];
 	// }
+	for(let i=0; i<arr.length-1; i++) {
+		let idx1 = i;
+		let idx2 = arr.length-(n-i%n);
+		if(idx2 < idx1) {
+			idx2 = arr.length - 1;
+		}
+		let temp = arr[idx2];
+		arr[idx2] = arr[idx1];
+		arr[idx1] = temp;
+	}
+	// const arrOut = processSwap(arr, n, swapFunc);
 
-	const arrOut = processSwap(arr, n, swapFunc);
-
-	console.log(`===> after swap: ${arrOut}`);
+	console.log(`===> after swap: ${arr}`);
+	assert.deepEqual(arr, expect);
 }
 
 const processSwap = (arr, n, swap) => {
@@ -384,6 +421,16 @@ const createTree = () => {
 	return tree;
 }
 
+const inspect = obj => {
+	console.log(`${obj.constructor.name}.toString() = ${obj.toString()}`);
+	console.log(obj.toString());
+
+	console.log(`Prototype of ${obj.constructor.name} = ${Object.getPrototypeOf(obj)}`);
+	console.log(Object.getPrototypeOf(obj));
+
+}
+
+
 class Tree {
 	constructor() {
 		this.root = null;
@@ -409,3 +456,4 @@ class Node {
 }
 
 main()
+
