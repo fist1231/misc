@@ -25,8 +25,23 @@ const main = () => {
 
 	// struct(); 
 
-	inplaceSwap();
+	// inplaceSwap();
 
+	arrayOnly();
+
+}
+
+const arrayOnly = () => {
+
+	const arr = [4, 3, 6, 5, 0];
+	const n = 2;
+	console.log(arr);
+
+	// var arrDeletedItems = array.splice(start[, deleteCount[, item1[, item2[, ...]]]])
+	// arr.splice(arr.length-n).map((x, i)=> arr.splice(i, 0, x));
+	arr.splice(0, 0, arr.splice(arr.length-n, n));
+	// console.log(arr.splice(arr.length-n));
+	console.log(arr);
 }
 
 const inplaceSwap = () => {
