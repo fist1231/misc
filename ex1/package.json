@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "set NODE_ENV=development && babel-node -- sqrt.js",
+    "dev": "set NODE_ENV=development && babel-node -- treepeat.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
