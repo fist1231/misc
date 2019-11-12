@@ -77,7 +77,8 @@ const pathDepth = (graph, n1, n2, navs, paths) => {
 		arr.forEach(x=> {
 		    const newArray = [...navs];
 		    // console.log(`===> newArray: ${JSON.stringify(newArray)}`);
-			if(!navs.includes(x)) {
+			// if(!navs.includes(x)) {
+			if(!navs.some(z=> z===x)) {
 				pathDepth(graph, x, n2, newArray, paths);
 			}
 
