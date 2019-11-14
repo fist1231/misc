@@ -1,122 +1,125 @@
 console.log('trees repeat');
 
-const main = () => {
-	const t = getTree();
-	console.log(`Tree = ${JSON.stringify(t)}`);
+class TreePeat {
 
-	const res = traverseBreadth(t);
-	console.log(`Breadth = ${res}`);
+	main() {
+		const t = getTree();
+		console.log(`Tree = ${JSON.stringify(t)}`);
 
-	const rez = traverseDepth(t);
-	console.log(`Depth psto regular = ${rez}`);
+		const res = this.traverseBreadth(t);
+		console.log(`Breadth = ${res}`);
 
-	const rezUnIno = traverseDepthUn(t, left(), root(), right());
-	console.log(`Depth univer in-order = ${rezUnIno}`);
+		const rez = this.traverseDepth(t);
+		console.log(`Depth psto regular = ${rez}`);
 
-	const rezUnPro = traverseDepthUn(t, root(), left(), right());
-	console.log(`Depth univer pre-order = ${rezUnPro}`);
+		const rezUnIno = this.traverseDepthUn(t, left(), root(), right());
+		console.log(`Depth univer in-order = ${rezUnIno}`);
 
-	const rezUnPso = traverseDepthUn(t, left(), right(), root());
-	console.log(`Depth univer post-order = ${rezUnPso}`);
+		const rezUnPro = this.traverseDepthUn(t, root(), left(), right());
+		console.log(`Depth univer pre-order = ${rezUnPro}`);
 
-	// testf(t.top, [], rt()); // 1
-	// testf(rt(t.top, [])); // 2
+		const rezUnPso = this.traverseDepthUn(t, left(), right(), root());
+		console.log(`Depth univer post-order = ${rezUnPso}`);
 
-}
+		// testf(t.top, [], rt()); // 1
+		// testf(rt(t.top, [])); // 2
 
-// const testf = (node, arr, action) => {
-// 	// console.log(`Action = ${action}`);
-// 	action(node, arr); // 1
-// 	// action; // 2
-// }
+	}
 
-
-
-
-const traverseDepthUn = (t, first, second, third) => {
-	// console.log(`----> Action = ${action}`);
-	return processNodeUn(t.top, [], first, second, third);
-}
-
-const processNodeUn = (node, arr, first, second, third) => {
-	// may not be needing last 4 parameters, if root
-	arr = first(node, arr, first, second, third, processNodeUn);
-	arr = second(node, arr, first, second, third, processNodeUn);
-	arr = third(node, arr, first, second, third, processNodeUn); 
-	return arr;
-}
+	// const testf = (node, arr, action) => {
+	// 	// console.log(`Action = ${action}`);
+	// 	action(node, arr); // 1
+	// 	// action; // 2
+	// }
 
 
-const root = () => {
-	return (node, arr) => {
+
+
+	traverseDepthUn(t, first, second, third) {
+		// console.log(`----> Action = ${action}`);
+		return this.processNodeUn(t.top, [], first, second, third);
+	}
+
+	processNodeUn(node, arr, first, second, third) {
+		// may not be needing last 4 parameters, if root
+		arr = first(node, arr, first, second, third, processNodeUn);
+		arr = second(node, arr, first, second, third, processNodeUn);
+		arr = third(node, arr, first, second, third, processNodeUn); 
+		return arr;
+	}
+
+
+	root() {
+		return (node, arr) => {
+			arr.push(node.id);
+			// console.log(`****> ${arr}`);
+			return arr;
+		}
+	}
+
+	left() {
+		return (node, arr, first, second, third, action) => {
+			if(node.left) {
+				arr = action(node.left, arr, first, second, third);
+			}
+			return arr;
+		}
+	}
+
+	right() {
+		return (node, arr, first, second, third, action) => {
+			if(node.right) {
+				arr = action(node.right, arr, first, second, third);
+			}
+			return arr;
+		}
+	}
+
+
+
+
+	traverseDepth(t) {
+		return this.processNode(t.top, []);
+	}
+
+	processNode(node, arr) {
+		if(node.left) this.processNode(node.left, arr);
+		if(node.right) this.processNode(node.right, arr);
 		arr.push(node.id);
-		// console.log(`****> ${arr}`);
 		return arr;
 	}
-}
 
-const left = () => {
-	return (node, arr, first, second, third, action) => {
-		if(node.left) {
-			arr = action(node.left, arr, first, second, third);
+
+	traverseBreadth(t) {
+		const queue = [];
+		const result = [];
+		queue.push(t.top);
+		while(queue.length > 0) {
+			let node = queue.shift();
+			// console.log(`${node.id}; left=${node.left}; right=${node.right}`);
+			result.push(node.id);
+			if(node.left) {
+				queue.push(node.left);
+			}
+			if(node.right) {
+				queue.push(node.right);
+			}
 		}
-		return arr;
+		return result;
 	}
-}
 
-const right = () => {
-	return (node, arr, first, second, third, action) => {
-		if(node.right) {
-			arr = action(node.right, arr, first, second, third);
-		}
-		return arr;
+
+	getTree() {
+		const t = new Tree();
+		t.top.left = new Node(2);
+		t.top.right = new Node(3);
+		t.top.left.left = new Node(4);
+		t.top.left.right = new Node(5);
+		t.top.right.left = new Node(6);
+		t.top.right.right = new Node(7);
+		t.top.left.right.right = new Node(8);
+		return t;
 	}
-}
-
-
-
-
-const traverseDepth = (t) => {
-	return processNode(t.top, []);
-}
-
-const processNode = (node, arr) => {
-	if(node.left) processNode(node.left, arr);
-	if(node.right) processNode(node.right, arr);
-	arr.push(node.id);
-	return arr;
-}
-
-
-const traverseBreadth = t => {
-	const queue = [];
-	const result = [];
-	queue.push(t.top);
-	while(queue.length > 0) {
-		let node = queue.shift();
-		// console.log(`${node.id}; left=${node.left}; right=${node.right}`);
-		result.push(node.id);
-		if(node.left) {
-			queue.push(node.left);
-		}
-		if(node.right) {
-			queue.push(node.right);
-		}
-	}
-	return result;
-}
-
-
-const getTree = () => {
-	const t = new Tree();
-	t.top.left = new Node(2);
-	t.top.right = new Node(3);
-	t.top.left.left = new Node(4);
-	t.top.left.right = new Node(5);
-	t.top.right.left = new Node(6);
-	t.top.right.right = new Node(7);
-	t.top.left.right.right = new Node(8);
-	return t;
 }
 
 class Tree {
@@ -134,7 +137,9 @@ class Node {
 	}
 }
 
-main();
+export default TreePeat;
+
+// main();
 
 const sand = () => {
 	const f1 = () => console.log('f1');
