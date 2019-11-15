@@ -4,15 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "set NODE_ENV=development && babel-node -- bst.js",
+    "dev": "set NODE_ENV=development && babel-node -- linec.js",
     "test": "echo \"Test with Jest\" && jest"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
+    "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.2",
-    "@babel/node": "^7.5.5",
+    "@babel/node": "^7.7.0",
     "@babel/preset-env": "^7.7.1",
     "assert": "^2.0.0",
     "babel-jest": "^24.9.0",
@@ -20,7 +20,8 @@
     "babel-preset-es2015-mod": "^6.6.0",
     "babel-preset-es3": "^1.0.1",
     "jest": "^24.9.0",
-    "mathjs": "^6.0.3"
+    "mathjs": "^6.2.3",
+    "path": "^0.12.7"
   },
   "dependencies": {
     "future": "^2.3.1",
