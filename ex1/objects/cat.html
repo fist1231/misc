@@ -1,0 +1,158 @@
+<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.min.js"></script>
+
+
+<p style="text-align: center">
+<img src="img/cat.png" style="position: relative; width:50px; height:60px">
+</p>
+<div id="mountains">Loading ...</div>
+
+<label for="search">Search: </label>
+<input id="search" width="200px">
+<button id="but1">Click me</button>
+
+<script>
+let cat = document.querySelector("img");
+let angle = Math.PI / 2;
+function animate(time, lastTime) {
+if (lastTime != null) {
+angle += (time - lastTime) * 0.001;
+}
+cat.style.top = (250 + Math.sin(angle) * 200) + "px";
+cat.style.left = (Math.cos(angle) * 100) + "px";
+requestAnimationFrame(newTime => animate(newTime, time));
+}
+requestAnimationFrame(animate);
+
+
+const mounts = [
+	{name: 'Kilimanjaro', height: 5895, place: 'Tanzania'},
+	{name: 'Fuji', height: 3456, place: 'Japan'},
+	{name: 'Everest', height: 9415, place: 'Asia'},
+	{name: 'Blumont', height: 347, place: 'Paris'},
+	{name: 'Other', height: 100, place: 'Unknown'}
+]
+
+
+const createMountains = (data) => {
+
+
+	const tbl = document.createElement("table");
+	tbl.style.border = "1px solid #aaa";
+
+	let tr = document.createElement("tr");
+	let th1 = document.createElement("th");
+	let th2 = document.createElement("th");
+	let th3 = document.createElement("th");
+
+	const colHead1 = document.createTextNode("Name");
+	const colHead2 = document.createTextNode("Height");
+	const colHead3 = document.createTextNode("Location");
+
+	th1.appendChild(colHead1);
+	tr.appendChild(th1);
+
+	th2.appendChild(colHead2);
+	tr.appendChild(th2);
+
+	th3.appendChild(colHead3);
+	tr.appendChild(th3);
+
+	tbl.appendChild(tr);
+
+
+	data.forEach(obj => {
+		const ttr = document.createElement("tr");
+
+		for(let prop in obj) {
+			ttr.appendChild(createHtmlText("td", obj[prop]));
+
+		}
+
+		// ttr.appendChild(createHtmlText("td", obj.height));
+		// ttr.appendChild(createHtmlText("td", obj.place));
+		tbl.appendChild(ttr);
+	})
+
+
+	const dDiv = document.getElementById("mountains");
+	console.log(`dDiv = ${dDiv}`);
+	//dDiv.replaceChild(tbl, dDiv.firstChild);
+
+
+	  document.querySelector("#mountains").replaceChild(tbl, dDiv.firstChild);
+
+}
+
+const createHtmlNode = (tagName) => document.createElement(tagName);	
+const createHtmlText = (tagName, text) => {
+	const tN = document.createTextNode(text);
+	const tg = createHtmlNode(tagName);
+	tg.appendChild(tN);
+
+	if(typeof text == "number") {
+		tg.style.textAlign = "right";
+	}
+	tg.style.width = "200px";
+	tg.getBoundingClientRect();
+	tg.style.border = "1px solid #aaa";
+
+	return tg;
+}
+
+
+createMountains(mounts);
+
+
+	const allClicks = () => {
+
+		window.addEventListener("click", () => {
+			console.log("You knocked?");
+		});
+	}
+
+
+	let button = document.querySelector("#but1");
+	button.addEventListener("click", () => {
+		console.log("Button clicked once");
+	})
+
+
+		const { range, fromEvent, from } = rxjs;
+		const { map, filter, debounceTime, distinctUntilChanged, switchMap } = rxjs.operators;
+
+
+		// let searchBox = document.getElementById("search" );
+		let searchBox = document.querySelector("#search" );
+		console.log(`*********** searchBox=${searchBox}`);
+		let observable = rxjs.fromEvent(searchBox, 'input');	
+
+		
+		
+		
+		observable.pipe(
+				debounceTime(1000),
+				distinctUntilChanged(),
+				//switchMap(x => from(getData(x.target.value)))
+			)
+			.subscribe(x => {
+				    console.log(`--->value=${x.target.value}`);
+				    console.log(`--->x=${x}`);
+			});
+
+
+
+
+let scheduled = null;
+window.addEventListener("mousemove", event => {
+if (!scheduled) {
+setTimeout(() => {
+document.body.textContent =
+`Mouse at ${scheduled.pageX}, ${scheduled.pageY}`;
+scheduled = null;
+}, 250);
+}
+scheduled = event;
+});
+
+</script>
+
