@@ -188,27 +188,22 @@ class Linec {
 
 	parseFolderOld(dirname) {
 
-		// let count = 0;
-		// console.log(`***> parseFolderOld start, count: ${count}`);
 		return new Promise((resolve, reject) => {
-			// console.log(`***> parseFolderOld main promise start, count: ${count}; dirname=${dirname}`);
 			fs.readdir(dirname, (err, filenames) => {
 				if (err) reject(err);//throw err;
 
 				const promises = filenames.map(x => {
 					const fullPath = path.join(dirname, `${x}`);
-					return new Promise((reslv, rejct) => {
-						// console.log(`***> map promise start, count: ${count} for ${fullPath}`);
+					return new Promise((resolve, reject) => {
 						fs.stat(fullPath, (err, stat) => {
-							if (err) rejct(err);
+							if (err) reject(err);
 							if(stat.isDirectory()) {
 								if(x[0] != '.') {
-									reslv(this.parseFolderOld(fullPath));
+									resolve(this.parseFolderOld(fullPath));
 								}
-							} else { // file
+							} else {
 								if(path.extname(x) == '.java') {
-									reslv(1);
-									// console.log(`***> map promise .java, count: ${count} for ${fullPath}`);
+									resolve(1);
 								}
 							}
 						});
@@ -216,9 +211,7 @@ class Linec {
 				});
 				Promise.all(promises)
 				.then((res) => {
-					// count += res;
-					console.log(`^^^^^^> promised res=${res}`);
-					// return Math.max(...res);
+					console.log(`>>> res=${res}`);
 					const count = res.reduce((a, b) => a + b, 0);
 					resolve(count);
 				});
