@@ -5,6 +5,24 @@
  */
 class Regex {
 
+    isMatch(s, p, count) {
+        const prom = new Regex().findMatch(s, p, count);
+        let rz = null;
+        prom.then(result => {
+            console.log(`result: ${result.result}; count: ${result.count}`);
+            return result.result;
+            // }).then(r => {
+            //     console.log(`r: ${r}`);
+            //     rz = r;
+            //     return r;
+        });
+        // return rz;
+        // const pr = Promise.resolve(prom);
+        // console.log(`===> pr: ${pr}`);
+        // return pr.then(x => {return x});
+        return Promise.resolve({ "result": false });
+    };
+
     findMatch(s, p, count) {
         return new Promise((resolve, reject) => {
             let res = true;
@@ -55,23 +73,6 @@ class Regex {
 
     }
 
-    isMatch(s, p, count) {
-        const prom = new Regex().findMatch(s, p, count);
-        let rz = null;
-        prom.then(result => {
-            console.log(`result: ${result.result}; count: ${result.count}`);
-            return result.result;
-            // }).then(r => {
-            //     console.log(`r: ${r}`);
-            //     rz = r;
-            //     return r;
-        });
-        // return rz;
-        // const pr = Promise.resolve(prom);
-        // console.log(`===> pr: ${pr}`);
-        // return pr.then(x => {return x});
-        return Promise.resolve({ "result": false });
-    };
 
     splitFlow(s, p, char, count) {
         let result = false;
@@ -189,4 +190,4 @@ export default Regex;
 
 // splice -> Shift: 4800 -> 450
 // arrays -> string, splice vs substr(1): 450 -> 180
-// string.length -> s != null: 180 -> 172
+// string.length -> s != null: 180 -> 173
