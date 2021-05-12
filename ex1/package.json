@@ -20,7 +20,7 @@
     "babel-preset-es2015-mod": "^6.6.0",
     "babel-preset-es3": "^1.0.1",
     "jest": "^24.9.0",
-    "mathjs": "^6.0.3"
+    "mathjs": "^7.5.1"
   },
   "dependencies": {
     "future": "^2.3.1",
